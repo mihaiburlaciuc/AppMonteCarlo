@@ -5,8 +5,8 @@
 #include <pthread.h>
 #include <time.h>
 
-// #define MAX 2000000000
-#define MAX 200000000
+#define MAX 2000000000
+// #define MAX 200000000
 
 typedef struct {
 	int id;
@@ -29,10 +29,12 @@ void* thread_function(void *var)
 	thread_info info = *(thread_info *) var;
 	unsigned int count;
 	long double inBox = 0;
+	unsigned int seed;
 
-	for (count = 0; count < info.count_max; count++){
-		long double u1 = (long double)rand()/(long double)RAND_MAX;
-		long double u2 = (long double)rand()/(long double)RAND_MAX;
+	for (count = 0; count < info.count_max; count++) {
+		seed = time(NULL);
+		long double u1 = (long double)rand_r(&seed)/(long double)RAND_MAX;
+		long double u2 = (long double)rand_r(&seed)/(long double)RAND_MAX;
 
 		long double xcoord = ((info.x_max - info.x_min) * u1) + info.x_min;
 		long double ycoord = ((info.y_max - info.y_min) * u2) + info.y_min;
