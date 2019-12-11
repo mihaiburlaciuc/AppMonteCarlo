@@ -1,7 +1,9 @@
 #include <iostream> 
 #include <time.h>
 #include <limits.h>
-#include <pthread.h> 
+#include <pthread.h>
+#include <cstdlib>
+#include <stdio.h> 
   
 #define THREADS_NUMBER 4
 #define INTERVAL 48000
@@ -16,8 +18,7 @@ typedef struct {
 
 static long long MAX_NUMBER = 99990000.0;
 
-void* calculate_pi(void* arg) 
-{ 
+void* calculate_pi(void* arg) { 
     long long interval, i; 
     long double rand_x, rand_y, origin_distance;
     thread_data *data= (thread_data*)arg;
@@ -38,11 +39,10 @@ void* calculate_pi(void* arg)
         square_points[tId]++; 
     } 
 
-    return nullptr;
+    return NULL;
 } 
   
-int main() 
-{ 
+int main() { 
     time_t start_t, end_t;
     double diff_t;
     pthread_t threads[THREADS_NUMBER]; 
@@ -69,11 +69,9 @@ int main()
 
     long double total_square_points = 0; 
     for (int i = 0; i < THREADS_NUMBER; i++) 
-        total_square_points += square_points[i]; 
-
+        total_square_points += square_points[i];
     
-    long double pi = (long double) (4.0 * total_circle_points) / total_square_points; 
-    
+    long double pi = (long double) (4.0 * total_circle_points) / total_square_points;
   
     time(&end_t);
     diff_t = difftime(end_t, start_t);
