@@ -3,7 +3,7 @@
 #include <stdlib.h> 
 #include <unistd.h> 
 
-#define INTERVAL 48000
+#define INTERVAL 49000
 
 static long long MAX_NUMBER = 990000.0;
 
