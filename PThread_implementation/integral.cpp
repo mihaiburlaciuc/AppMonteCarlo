@@ -5,8 +5,8 @@
 #include <pthread.h>
 #include <time.h>
 
-#define MAX 2000000000
-// #define MAX 200000000
+// #define MAX 2000000000
+#define MAX 200000000
 
 typedef struct {
 	int id;
@@ -20,7 +20,7 @@ typedef struct {
 long double thread_inBox[500];
 
 // Functia pentru care se calculeaza integrala
-long double f (long double x){
+long double f (long double x) {
 	return exp(2 * sin(x) * sin(x));
 }
 

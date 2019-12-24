@@ -3,48 +3,59 @@
 #include <stdlib.h>
 #include <math.h>
 #include <limits.h>
+#include <time.h>
+
+// #define MAX 2000000000
+#define MAX 200000000
 
 unsigned int count;
-float total, inBox;
+long double total, inBox;
 int x_min, x_max, y_min, y_max;
 
 //The function that the integral should be calculated for
-float f (float x){
+long double f (long double x){
   return exp(2 * sin(x) * sin(x));
 }
 
-//fcuntion that calculates the integral
-float integral (float (*f)(float), float xmin, float xmax, float ymin, float ymax){
-  for (count=0; count < 2000000000; count++){
-    float u1 = (float)rand()/(float)RAND_MAX;
-    float u2 = (float)rand()/(float)RAND_MAX;
+//function that calculates the integral
+long double integral (long double (*f)(long double), long double xmin, long double xmax, long double ymin, long double ymax) {
+	for (count = 0; count < MAX; count++){
+		long double u1 = (long double)rand()/(long double)RAND_MAX;
+		long double u2 = (long double)rand()/(long double)RAND_MAX;
 
-    float xcoord = ((xmax - xmin)*u1) + xmin;
-    float ycoord = ((ymax - ymin)*u2) + ymin;
-    float val = f(xcoord);
+		long double xcoord = ((xmax - xmin)*u1) + xmin;
+		long double ycoord = ((ymax - ymin)*u2) + ymin;
+		long double val = f(xcoord);
 
-    total++;
+		total++;
 
-    if (val > ycoord){
-      inBox++;
-    }
-  }
+		if (val > ycoord){
+			inBox++;
+		}
+	}
 
-  float density = inBox/total;
+	long double density = inBox / total;
 
-  return (xmax - xmin) * (ymax - ymin) * density;
+	return (xmax - xmin) * (ymax - ymin) * density;
 }
 
 
 int main(){
-  std::cout<< "RESULT: " <<std::endl;
-  float result;
-  x_min = -1000;
-  x_max = 1000;
-  y_min = 0;
-  y_max = 40000;
-  result = integral(f,-1000,1000,0,400000);
-  std::cout << result << std::endl;
-  return 0;
-}
+	clock_t start, end;
+	double cpu_time_used;
+	long double result;
+	x_min = -2;
+	x_max = 2;
+	y_min = 0;
+	y_max = 4;
 
+	start = clock();
+	result = integral(f, x_min, x_max, y_min, y_max);
+	end = clock();
+
+	std::cout << "RESULT: " << result << "\n";
+	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
+	std::cout << "Time used: " << cpu_time_used << "\n";
+
+	return 0;
+}
