@@ -43,7 +43,7 @@ void integral (float (*f)(float), float xmin, float xmax, float ymin, float ymax
         float res = (xmax - xmin) * (ymax - ymin) * density;
         printf("%f\n",res);
     }
-    else 
+    else
     {
       int local_inBox = 0;
       int local_dim;
@@ -64,7 +64,7 @@ void integral (float (*f)(float), float xmin, float xmax, float ymin, float ymax
         }
       }
       MPI_Send(&local_inBox, 1, MPI_INT, 0, 0, MPI_COMM_WORLD);
-   } 
+   }
 }
 
 
@@ -78,9 +78,8 @@ int main(){
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   srand(time(NULL));
   if(rank == 0)
-    printf("RESULT: "); 
+    printf("RESULT: ");
   integral(f,-2,2,0,4);
   MPI_Finalize();
   return 0;
 }
-
