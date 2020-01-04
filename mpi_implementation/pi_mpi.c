@@ -4,12 +4,20 @@
 #include <unistd.h>
 #include <time.h>
 
-#define INTERVAL 48000
+#define INTERVAL 49000
 
 static long long MAX_NUMBER = 990000.0;
 
+<<<<<<< HEAD
 int main(int argc, char* argv[]) {
 	int pid, np,
+=======
+/** RUN MPI
+ * mpirun -np 4 ./pi_mpi
+ */
+int main(int argc, char* argv[]) { 
+	int pid, np, 
+>>>>>>> pi_MPI
     n_elements_recieved;
 
     long long square_points = 0;
@@ -27,10 +35,16 @@ int main(int argc, char* argv[]) {
 
     long long elements_per_proc = MAX_NUMBER / np;
 
+<<<<<<< HEAD
 	// master process
 	if (pid == 0) {
 
 		int i;
+=======
+	// master process 
+	if (pid == 0) { 
+		int i; 
+>>>>>>> pi_MPI
         long long circle_points = 0;
         // Run its own work
         long double rand_x, rand_y, origin_distance;

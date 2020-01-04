@@ -24,12 +24,20 @@ void* calculate_pi(void* arg) {
     thread_data *data= (thread_data*)arg;
     int tId = data->tid;
 
-    srand(time(NULL)); 
+    unsigned int seed;
+    seed = time(NULL);
 
     for (i = 0; i < MAX_NUMBER / THREADS_NUMBER; i++) { 
-        rand_x = double(rand() % (INTERVAL + 1)) / INTERVAL; 
-        rand_y = double(rand() % (INTERVAL + 1)) / INTERVAL; 
+        int random_value_X = rand_r(&seed);
+        int random_value_Y = rand_r(&seed);
+        // printf("Random value X: %d Y: %d\n", random_value_X, random_value_Y);
+
+        rand_x = double(random_value_X % (INTERVAL + 1)) / INTERVAL; 
+        rand_y = double(random_value_Y % (INTERVAL + 1)) / INTERVAL; 
   
+        // if (i < 30)
+        //     printf("tId %d - X: %Lf Y: %Lf\n", tId, rand_x, rand_y);
+
         origin_distance = rand_x * rand_x + rand_y * rand_y; 
   
         if (origin_distance <= 1) {
