@@ -7,6 +7,9 @@
 
 static long long MAX_NUMBER = 990000.0;
 
+/** RUN MPI
+ * mpirun -np 4 ./pi_mpi
+ */
 int main(int argc, char* argv[]) { 
 	int pid, np, 
     n_elements_recieved;
@@ -28,7 +31,6 @@ int main(int argc, char* argv[]) {
 
 	// master process 
 	if (pid == 0) { 
-        
 		int i; 
         long long circle_points = 0;
         // Run its own work
