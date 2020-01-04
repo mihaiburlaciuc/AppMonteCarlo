@@ -78,16 +78,13 @@ int main(){
 
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   srand(time(NULL));
-<<<<<<< HEAD
   struct timeval  start, stop;
   if(rank == 0) {
     printf("RESULT: ");
     gettimeofday(&start, NULL);
   }
-=======
   if(rank == 0)
     printf("RESULT: ");
->>>>>>> c6d906fd7d318d66684c2228f1be0c8604411e44
   integral(f,-2,2,0,4);
   if(rank == 0) {
     gettimeofday(&stop, NULL);

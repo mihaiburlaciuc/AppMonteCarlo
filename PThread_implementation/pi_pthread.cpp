@@ -5,18 +5,18 @@
 #include <cstdlib>
 #include <stdio.h> 
   
-#define THREADS_NUMBER 4
-#define INTERVAL 48000
+#define INTERVAL 2000000000
 using namespace std; 
 
 long long *circle_points;
 long long *square_points;
+int threads_number;
 
 typedef struct {
     int tid;
 } thread_data;
 
-static long long MAX_NUMBER = 99990000.0;
+static long long MAX_NUMBER = 2000000000;
 
 void* calculate_pi(void* arg) { 
     long long interval, i; 
@@ -27,7 +27,7 @@ void* calculate_pi(void* arg) {
     unsigned int seed;
     seed = time(NULL);
 
-    for (i = 0; i < MAX_NUMBER / THREADS_NUMBER; i++) { 
+    for (i = 0; i < MAX_NUMBER / threads_number; i++) { 
         int random_value_X = rand_r(&seed);
         int random_value_Y = rand_r(&seed);
         // printf("Random value X: %d Y: %d\n", random_value_X, random_value_Y);
@@ -50,33 +50,34 @@ void* calculate_pi(void* arg) {
     return NULL;
 } 
   
-int main() { 
+int main(int argc, char *argv[]) {
+    threads_number = atoi(argv[1]);
     time_t start_t, end_t;
     double diff_t;
-    pthread_t threads[THREADS_NUMBER]; 
+    pthread_t threads[threads_number]; 
 
-    circle_points = new long long[THREADS_NUMBER];
-    square_points = new long long[THREADS_NUMBER];
+    circle_points = new long long[threads_number];
+    square_points = new long long[threads_number];
 
-    thread_data data[THREADS_NUMBER];
-    for (int i = 0; i < THREADS_NUMBER; i++) 
+    thread_data data[threads_number];
+    for (int i = 0; i < threads_number; i++) 
         data[i].tid = i;
 
     printf("Starting timer...\n");
     time(&start_t);  
 
-    for (int i = 0; i < THREADS_NUMBER; i++) 
+    for (int i = 0; i < threads_number; i++) 
         pthread_create(&threads[i], NULL, calculate_pi, (void *)&data[i]); 
     
-    for (int i = 0; i < THREADS_NUMBER; i++) 
+    for (int i = 0; i < threads_number; i++) 
         pthread_join(threads[i], NULL); 
   
     long double total_circle_points = 0; 
-    for (int i = 0; i < THREADS_NUMBER; i++) 
+    for (int i = 0; i < threads_number; i++) 
         total_circle_points += circle_points[i]; 
 
     long double total_square_points = 0; 
-    for (int i = 0; i < THREADS_NUMBER; i++) 
+    for (int i = 0; i < threads_number; i++) 
         total_square_points += square_points[i];
     
     long double pi = (long double) (4.0 * total_circle_points) / total_square_points;
@@ -84,8 +85,8 @@ int main() {
     time(&end_t);
     diff_t = difftime(end_t, start_t);
 
-    printf("Execution time = %f\n", diff_t);
-    cout << "\nFinal Estimation of Pi = " << pi << "\n"; 
+    printf("Execution time for pi_pthread with %d threads = %f\n", threads_number,diff_t);
+    cout << "Final Estimation of Pi = " << pi << "\n\n"; 
 
     // free memory
     delete circle_points;

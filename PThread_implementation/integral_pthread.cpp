@@ -4,6 +4,7 @@
 #include <math.h>
 #include <pthread.h>
 #include <time.h>
+#include <sys/time.h>
 
 #define MAX 2000000000
 // #define MAX 200000000
@@ -51,13 +52,14 @@ void* thread_function(void *var)
 }
 
 int main(int argc, char **argv) {
-	clock_t start, end;
-	double cpu_time_used;
 	long double result;
 	int x_min = -2;
 	int x_max = 2;
 	int y_min = 0;
 	int y_max = 4;
+
+	struct timeval  start, stop;
+   
 
 	if (argc < 2) {
 		fprintf(stderr, "Usage: %s num_threads\n", argv[0]);
@@ -82,7 +84,8 @@ int main(int argc, char **argv) {
 		thread_info[i].y_max = y_max;
 	}
 
-	start = clock();
+	gettimeofday(&start, NULL);
+
 	for (i = 0; i < num_threads; i++)
 	{
 		pthread_create(&(tid[i]), NULL, thread_function, &(thread_info[i]));
@@ -101,11 +104,13 @@ int main(int argc, char **argv) {
 	long double density = inBox_sum / (long double) MAX;
 
 	result = (x_max - x_min) * (y_max - y_min) * density;
-	end = clock();
 
 	std::cout << "RESULT: " << result << "\n";
-	cpu_time_used = ((double) (end - start)) / CLOCKS_PER_SEC;
-	std::cout << "Time used: " << cpu_time_used << "\n";
+	gettimeofday(&stop, NULL);
+  	printf ("Integral PThread with %d threads has a duration of %lf seconds\n",
+          atoi(argv[1]),
+          (double) (start.tv_usec - stop.tv_usec) / 1000000 +
+          (double) (stop.tv_sec - start.tv_sec));
 
 	return 0;
 }
