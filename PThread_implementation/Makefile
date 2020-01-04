@@ -1,10 +1,10 @@
-build: integral pi_parallel
+build: integral_pthread pi_pthread
 
-integral: integral.cpp
-	g++ -Wall integral.cpp -o integral -lpthread
+integral_pthread: integral_pthread.cpp
+	g++ -Wall integral_pthread.cpp -o integral_pthread -lpthread
 
-pi_parallel: pi_parallel.cpp
-	g++ pi_parallel.cpp -lpthread -o pi_parallel
+pi_pthread: pi_pthread.cpp
+	g++ pi_pthread.cpp -lpthread -o pi_pthread
 
 clean:
-	rm -f integral pi_parallel
+	rm -f integral_pthread pi_pthread
