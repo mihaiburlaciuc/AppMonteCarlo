@@ -1,10 +1,10 @@
-build: integral pi
+build: integral_serial pi_serial
 
-integral: integral.cpp
-	g++ -Wall integral.cpp -o integral
+integral_serial: integral_serial.cpp
+	g++ -Wall integral_serial.cpp -o integral_serial
 
-pi: pi.cpp
-	g++ -Wall pi.cpp -o pi
+pi_serial: pi_serial.cpp
+	g++ -Wall pi_serial.cpp -o pi_serial
 
 clean:
-	rm -f integral pi
+	rm -f integral_serial pi_serial
