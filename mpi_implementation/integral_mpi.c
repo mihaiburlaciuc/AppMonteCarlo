@@ -4,6 +4,7 @@
 #include <limits.h>
 #include <time.h>
 #include <mpi.h>
+#include <sys/time.h>
 #define NUM_REPS 2000000000
 
 unsigned int count;
@@ -77,9 +78,24 @@ int main(){
 
   MPI_Comm_rank(MPI_COMM_WORLD, &rank);
   srand(time(NULL));
+<<<<<<< HEAD
+  struct timeval  start, stop;
+  if(rank == 0) {
+    printf("RESULT: ");
+    gettimeofday(&start, NULL);
+  }
+=======
   if(rank == 0)
     printf("RESULT: ");
+>>>>>>> c6d906fd7d318d66684c2228f1be0c8604411e44
   integral(f,-2,2,0,4);
+  if(rank == 0) {
+    gettimeofday(&stop, NULL);
+    printf ("Integral MPI with %d threads has a duration of %lf seconds\n",
+            world_size,
+            (double) (start.tv_usec - stop.tv_usec) / 1000000 +
+            (double) (stop.tv_sec - start.tv_sec));
+  }
   MPI_Finalize();
   return 0;
 }

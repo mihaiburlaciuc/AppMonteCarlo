@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <sys/time.h>
 #include <omp.h>
 #define NUM_REPS 2000000000
 
@@ -16,13 +17,13 @@ double f (double x){
 //
 
 //function to calculate a definite integral given bounds of integration (xmin/max) & bounds of function (ymin/ymax)
-void integral (double (*f)(double), double xmin, double xmax, double ymin, double ymax){
+void integral (double (*f)(double), double xmin, double xmax, double ymin, double ymax) {
   unsigned seed;
   #pragma omp parallel private(seed)
   {
     seed = time(NULL);
     int local_inBox = 0;
-    #pragma omp for
+    #pragma omp for schedule (static)
     for (count=0; count < NUM_REPS; count++) {
       double u1 = (double)rand_r(&seed)/(double)RAND_MAX;
       double u2 = (double)rand_r(&seed)/(double)RAND_MAX;
@@ -50,7 +51,16 @@ void integral (double (*f)(double), double xmin, double xmax, double ymin, doubl
 }
 
 
-int main() {
-printf("RESULT:");
-integral(f,-2,2,0,4);
+int main(int argc, char *argv[]) {
+  printf("RESULT:");
+  omp_set_dynamic(0);
+  omp_set_num_threads(atoi(argv[1]));
+  struct timeval  start, stop;
+  gettimeofday(&start, NULL);
+  integral(f,-2,2,0,4);
+  gettimeofday(&stop, NULL);
+  printf ("Integral OPENMP with %d threads has a duration of %lf seconds\n",
+          atoi(argv[1]),
+          (double) (start.tv_usec - stop.tv_usec) / 1000000 +
+          (double) (stop.tv_sec - start.tv_sec));
 }
