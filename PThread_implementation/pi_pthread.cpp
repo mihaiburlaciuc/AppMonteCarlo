@@ -8,8 +8,8 @@
 #define INTERVAL 2000000000
 using namespace std; 
 
-long long *circle_points;
-long long *square_points;
+long long circle_points[500];
+long long square_points[500];
 int threads_number;
 
 typedef struct {
@@ -27,6 +27,9 @@ void* calculate_pi(void* arg) {
     unsigned int seed;
     seed = time(NULL);
 
+    int local_circle_points = 0;
+    int local_total_points = 0;
+
     for (i = 0; i < MAX_NUMBER / threads_number; i++) { 
         int random_value_X = rand_r(&seed);
         int random_value_Y = rand_r(&seed);
@@ -39,13 +42,17 @@ void* calculate_pi(void* arg) {
         //     printf("tId %d - X: %Lf Y: %Lf\n", tId, rand_x, rand_y);
 
         origin_distance = rand_x * rand_x + rand_y * rand_y; 
-  
+        
+
         if (origin_distance <= 1) {
-            circle_points[tId]++; 
+            local_circle_points++; 
         }
   
-        square_points[tId]++; 
+        local_total_points++; 
     } 
+
+    circle_points[tId] = local_circle_points;
+    square_points[tId] = local_total_points;
 
     return NULL;
 } 
@@ -56,8 +63,8 @@ int main(int argc, char *argv[]) {
     double diff_t;
     pthread_t threads[threads_number]; 
 
-    circle_points = new long long[threads_number];
-    square_points = new long long[threads_number];
+    // circle_points = new long long[threads_number];
+    // square_points = new long long[threads_number];
 
     thread_data data[threads_number];
     for (int i = 0; i < threads_number; i++) 
@@ -89,8 +96,8 @@ int main(int argc, char *argv[]) {
     cout << "Final Estimation of Pi = " << pi << "\n\n"; 
 
     // free memory
-    delete circle_points;
-    delete square_points;
+    // delete circle_points;
+    // delete square_points;
      
     return 0; 
 } 
